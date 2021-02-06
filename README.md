@@ -7,21 +7,24 @@ Take home assignment
 
 A `POST` HTTP request needs to be made if the user is trying to checkout the ebook if available.
 
-`POST /users/{user-id}/reservations`
+>• The system should be successful if a user checks out an available ebook.<br/>
+• The system should keep track of which copy is checked out to which user. The system should always assign the user the oldest available copy. It should mark the copy as checked out and update its timestamp at every checkout.<br/>
+
+`POST /users/{user-id}/checkouts`
 
 **Checkout an ebook 10001 at 1pm on Feb 1 for one week**
 
-#### Request and request body
+#### Request uri, header and payload 
 
 ```
-POST /users/78965/reservations HTTP
+POST /users/78965/checkouts HTTP
 
 Headers:
 Content-Type: application/json
 
 Request-body:
 {
-  "reservations": [
+  "data": [
     {
       "bookIdentifier": "10001",
       "checkoutDate": "01-02-2020T13:00:00.000",
@@ -41,21 +44,299 @@ content-type: application/json
 
 Response-body:
 {
-  "reservations":[
+  "data":[
     {
-      "reservationId": "90001",
-      "user": "78965",
+      "checkoutId": "90001",
+      "user": {
+        "id": "78965",
+        "currentCheckout", 1,
+        "maxCheckout": 10,
+        "quotaReached": false
+      },
       "bookIdentifier": "10001",
-      "checkoutDate": "01-02-2020T13:00:00.000",
-      "dueDate": "08-02-2020T13:00:00.000",
-      "status": "reserved/checkout"
+      "bookCopy": {
+        "number": 10,
+        "checkoutDate": "01-02-2020T13:00:00.000",
+        "dueDate": "08-02-2020T13:00:00.000",
+        "status": "checked-out"
+      }
     }
   ]
 }
 
 ```
 
-By making reservations an array we can do multiple reservations of books at one time.
+**Note:** By making 'checkouts' an array we can do multiple checkouts of books at one time.
+Intention is being we can checkout multiple ebooks at once rather than calling/making each call of each book. Advantage here is reducing calls and processing all at once.
+
+>• The system should return an error for a user or an ebook that doesn’t exist.<br/>
+
+If user `77896` is not in the system
+
+#### Request
+
+`POST /users/77896/checkouts HTTP`
+
+Ignoring the payload
+
+#### Response
+
+`404 NOT FOUND`
+
+Since user is not in the system, return a 404.
+
+If ebook 10005 is not in the system
+
+#### Request uri, header and payload 
+
+```
+POST /users/78965/checkouts HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    {
+      "bookIdentifier": "10005",
+      "checkoutDate": "01-02-2020T13:00:00.000",
+      "duration": {
+        "days": 7
+      }
+    }
+  ]
+}
+```
+
+#### Response
+
+```
+422 Unprocessable Entity
+content-type: application/json 
+
+Response-body:
+{
+  "message": "Unprocessable Entity",
+  "errors": [
+    {
+      "resource": "data[0]",
+      "field": "bookIdentifier",
+      "message": "book not found in the system",
+      "code": "not_found"
+    }
+  ]
+}
+
+```
+
+Give a 422 as unprocessible entity, since the bookIdentifier/ebook does not exist in the system.  
+
+
+>• The system should return an error if the ebook is checked out to the user already.<br/>
+
+#### Request uri, header and payload 
+
+```
+POST /users/78965/checkouts HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    {
+      "bookIdentifier": "10001",
+      "checkoutDate": "01-02-2020T13:00:00.000",
+      "duration": {
+        "days": 7
+      }
+    }
+  ]
+}
+```
+
+#### Response body
+
+```
+422 Unprocessable Entity
+content-type: application/json 
+
+Response-body:
+{
+  "message": "Unprocessable Entity",
+  "errors": [
+    {
+      "resource": "data[0]",
+      "field": "bookIdentifier",
+      "message": "book is already assigned to user",
+      "code": "assigned"
+    }
+  ]
+}
+
+```
+
+If trying to assign the same ebook (being a resource), we raise a 422 to notify it is already assigned to the user.
+
+>• The system should keep track of a user’s checkout quota. A user can only have a maximum of 10 checkouts. The system should return an error if the user is about to exceed their checkout quota.<br/>
+
+**Reaching or reached checkouts quota**
+
+#### Request uri, header and payload 
+
+```
+POST /users/78965/checkouts HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    {
+      "bookIdentifier": "10001",
+      "checkoutDate": "01-02-2020T13:00:00.000",
+      "duration": {
+        "days": 7
+      }
+    }
+  ]
+}
+```
+
+#### Response body
+
+```
+201 OK
+content-type: application/json 
+
+Response-body:
+{
+  "data":[
+    {
+      "checkoutId": "90001",
+      "user": {
+        "id": "78965",
+        "currentCheckout", 10,
+        "maxCheckout": 10,
+        "quotaReached": true
+      },
+      "bookIdentifier": "10001",
+      "bookCopy": {
+        "number": 10,
+        "checkoutDate": "01-02-2020T13:00:00.000",
+        "dueDate": "08-02-2020T13:00:00.000",
+        "status": "checked-out"
+      }
+    }
+  ]
+}
+
+```
+
+Still allow to checkout ebooks, but trigger quotaReached to true. So consumer is aware of their quota being filled in.
+
+**What if they reached reached max checkouts, checking out 11th ebook**
+
+#### Request uri, header and payload 
+
+```
+POST /users/78965/checkouts HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    {
+      "bookIdentifier": "10001",
+      "checkoutDate": "01-02-2020T13:00:00.000",
+      "duration": {
+        "days": 7
+      }
+    }
+  ]
+}
+```
+
+#### Response body
+
+```
+422 Unprocessable Entity
+content-type: application/json 
+
+Response-body:
+{
+  "message": "Unprocessable Entity",
+  "errors": [
+    {
+      "resource": "data[0]",
+      "field": "bookIdentifier",
+      "message": "Exceeded max checkout quota",
+      "code": "quota_reached"
+    }
+  ]
+}
+
+```
+
+Used 422 response code to notify exceeded max checkouts quota.
+
+
+>• The system should return an error if the ebook is unavailable.<br/>
+
+If ebook 10005 is unavailable
+
+#### Request uri, header and payload 
+
+```
+POST /users/78965/checkouts HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    {
+      "bookIdentifier": "10005",
+      "checkoutDate": "01-02-2020T13:00:00.000",
+      "duration": {
+        "days": 7
+      }
+    }
+  ]
+}
+```
+
+#### Response
+
+```
+422 Unprocessable Entity
+content-type: application/json 
+
+Response-body:
+{
+  "message": "Unprocessable Entity",
+  "errors": [
+    {
+      "resource": "data[0]",
+      "field": "bookIdentifier",
+      "message": "book is unavailable",
+      "code": "unavailable"
+    }
+  ]
+}
+
+```
+
+Give a 422 as unprocessible entity, since the bookIdentifier/ebook is unavailable.
+
+`Note:` There seems a lot of 422 being raised. I want the client to understand the root cause of failure. Clients can parse the error response and get to know the state and the error being raised.<br/>
+The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity, and the syntax of the request entity (which is correct, if not 400 (Malformed request) is raised) but was unable to process the payload.
 
 
 ### A user should be able to return their ebook that they have checked out.
