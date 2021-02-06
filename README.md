@@ -58,6 +58,7 @@ Response-body:
         "number": 10,
         "checkoutDate": "01-02-2020T13:00:00.000",
         "dueDate": "08-02-2020T13:00:00.000",
+        "lastUpdatedDate": "01-01-2020T13:00:00.000",
         "status": "checked-out"
       }
     }
@@ -228,6 +229,7 @@ Response-body:
         "number": 10,
         "checkoutDate": "01-02-2020T13:00:00.000",
         "dueDate": "08-02-2020T13:00:00.000",
+        "lastUpdatedDate": "01-01-2020T13:00:00.000",
         "status": "checked-out"
       }
     }
@@ -340,6 +342,116 @@ The 422 (Unprocessable Entity) status code means the server understands the cont
 
 
 ### A user should be able to return their ebook that they have checked out.
+
+
+>• The system should be successful if a user returns an ebook that they have checked out.
+• The system should mark the corresponding checked out copy as available and update its timestamp.
+• The system should decrease a user’s checkout quota.
+
+We can pretty much do a `PUT` call here, since it is being updated
+
+
+`PUT /users/{user-id}/checkouts/{checkout-id}`
+
+**Returns the ebook 10001 at 1pm on Feb 2**
+
+#### Request uri, header and payload 
+
+```
+PUT /users/78965/checkouts/90001 HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    {
+      "bookIdentifier": "10001",
+      "returnDate": "02-02-2020T13:00:00.000"
+    }
+  ]
+}
+```
+
+#### Response body
+
+```
+201 OK
+content-type: application/json 
+
+Response-body:
+{
+  "data":[
+    {
+      "checkoutId": "90001",
+      "user": {
+        "id": "78965",
+        "currentCheckout", 0,
+        "maxCheckout": 10,
+        "quotaReached": false
+      },
+      "bookIdentifier": "10001",
+      "bookCopy": {
+        "number": 10,
+        "checkoutDate": "n/a",
+        "dueDate": "n/a",
+        "lastUpdatedDate": "02-02-2020T13:00:00.000",
+        "status": "available"
+      }
+    }
+  ]
+}
+
+```
+
+Updates the User quota and marks the ebook as available.
+
+>• The system should return an error for a user or an ebook that doesn’t exist.
+
+If user 78965 not found, return 404
+
+#### Request 
+
+`PUT /users/78965/checkouts/90001 HTTP`
+
+#### Response
+
+`404 NOT FOUND HTTP`
+
+
+## Let to answer the above
+
+
+>• The system should return an error if the user returns an ebook that they haven’t checked out.
+
+#### Request uri, header and payload 
+
+```
+PUT /users/78965/checkouts/90001 HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    {
+      "bookIdentifier": "10001",
+      "returnDate": "02-02-2020T13:00:00.000"
+    }
+  ]
+}
+```
+
+#### Response
+
+```
+404 NOT FOUND HTTP
+```
+
+If there is no checkout for the ebook which checkout is not made for, we can simply put 404 since no relation/checkout was made on the ebook to the user.
+
 
 ### Retrieve the availability of an ebook.
 
