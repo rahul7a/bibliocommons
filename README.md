@@ -5,6 +5,59 @@ Take home assignment
 
 ### A user should be able to checkout an ebook if it’s available.
 
+A `POST` HTTP request needs to be made if the user is trying to checkout the ebook if available.
+
+`POST /users/{user-id}/reservations`
+
+**Checkout an ebook 10001 at 1pm on Feb 1 for one week**
+
+#### Request and request body
+
+```
+POST /users/78965/reservations HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "reservations": [
+    {
+      "bookIdentifier": "10001",
+      "checkoutDate": "01-02-2020T13:00:00.000",
+      "duration": {
+        "days": 7
+      }
+    }
+  ]
+}
+```
+
+#### Response body
+
+```
+201 OK
+content-type: application/json 
+
+Response-body:
+{
+  "reservations":[
+    {
+      "reservationId": "90001",
+      "user": "78965",
+      "bookIdentifier": "10001",
+      "checkoutDate": "01-02-2020T13:00:00.000",
+      "dueDate": "08-02-2020T13:00:00.000",
+      "status": "reserved/checkout"
+    }
+  ]
+}
+
+```
+
+By making reservations an array we can do multiple reservations of books at one time.
+
+
 ### A user should be able to return their ebook that they have checked out.
 
 ### Retrieve the availability of an ebook.
@@ -31,7 +84,7 @@ Let's design both requests to retrieve ebook(s)
 
 #### Request
 
-`https://some-library-system/books/book-identifiers/10001`
+`GET /books/book-identifiers/10001 HTTP`
 
 #### Response body
 
@@ -75,7 +128,7 @@ From the above response we can see, an ebook with title and inventory informatio
 
 #### Request
 
-`https://some-library-system/books/search?keywords=Coding+Principles`
+`GET /books/search?keywords=Coding+Principles HTTP`
 
 #### Response body
 
@@ -131,11 +184,13 @@ content-type: application/json
 
 #### Request
 
-`https://some-library-system/books/book-identifiers/70007`
+`GET /books/book-identifiers/70007`
 
 #### Response body
 
 ```
 404 Not found
-
 ```
+
+Instead of an error, return a not found and let the client handle it gracefully.
+
