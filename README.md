@@ -3,6 +3,8 @@ Take home assignment
 
 ## Library availability system for ebooks
 
+## Part 1
+
 ### A user should be able to checkout an ebook if it’s available.
 
 A `POST` HTTP request needs to be made if the user is trying to checkout the ebook if available.
@@ -609,6 +611,8 @@ content-type: application/json
 Instead of an error, return a not found and let the client handle it gracefully.
 
 ***
+
+## Part 2
 
 >• Code package and class layout <br/>
 • Database entities and their relationships between each other <br/>
