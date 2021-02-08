@@ -620,7 +620,9 @@ Instead of an error, return a not found and let the client handle it gracefully.
 
 ### Class diagrams
 
-Going by worflow of checking out ebooks if available, return the checked ebook and retrieve availability of the ebook went through the below Class and ER diagram
+Going by worflow of checking out ebooks if available, return the checked ebook and retrieve availability of the ebook.
+
+Designed the below Class and ER diagrams.
 
 ![ClassDiagram3](./images/ClassDiagram3.PNG)
 
@@ -642,3 +644,156 @@ We have classes (layout) related to each interaction.
 ### Entity-Relation diagrams
 
 ![ER2](./images/ER2.PNG)
+
+The diagram above shows the business objects used in this API as well as their relationships. The library stocks many books. Each book can have several copies - represented by the Bookcopy objects. Each Bookcopy has a unique identification. The library has many Users. Each User can checkout an ebook. The attributes of a checkout are represented by the Checkout object. When a User does a checkout the associated class objects are created and data is inserted along after validations. Similarly Book and Inventory provides inforation and metadata for the books.
+
+
+## Part 3
+
+>3) Based on the design document, the last task is to provide a concrete code implementation for one user workflow, specifically “A user should be able to checkout an ebook if it’s available”. You should include the following:<br/>
+• All the business requirements for this workflow<br/>
+• Appropriate tests for your implementation<br/>
+You should implement the service interface below:<br/>
+public interface CheckoutService<T> {<br/>
+    T checkout(long userId, long bookId);<br/>
+}<br/>
+Your code does not need to be runnable, but it does need to compile.<br/>
+Note: Feel free to provide an abstraction to the underlying datastore that describes the underlying calls it would be making.<br/>
+Follow up: How would you ensure the checkout operation is concurrent? For example, there is one available copy left for a popular ebook and many users are trying to check it out at the same time. Describe your solution.<br/>
+
+Code snippet for CheckoutService, additional code and project structure is added to the repo.
+```
+/**
+ * The system should be successful if a user checks out an available ebook. 
+ * • The system should keep track of which copy is checked out to which user. The system should always assign the user the oldest available copy. 
+ * It should mark the copy as checked out and update its timestamp at every checkout. 
+ * • The system should return an error for a user or an ebook that doesn’t exist.
+ * • The system should return an error if the ebook is checked out to the user already. 
+ * • The system should keep track of a user’s checkout quota. A user can only have a maximum of 10 checkouts. The system should return an error if
+ * the user is about to exceed their checkout quota. 
+ * • The system should return an error if the ebook is unavailable.
+ *
+ */
+@Service
+public class CheckoutServiceImpl implements CheckoutService<CheckoutModel> {
+
+	private static final int CHECKOUT_QUOTA = 10;
+
+	@Autowired
+	private CheckoutRepository checkoutRepository;
+
+	@Autowired
+	private BookRepository bookRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private CheckoutUtilBuilder checkoutUtilBuilder;
+
+	@Override
+	public CheckoutModel checkout(long userId, long bookId) {
+
+		/*
+		 * User does not exist
+		 */
+		if (!userRepository.isValidUser(userId)) {
+			throw new UserNotfoundException("user not found.");
+		}
+
+		/*
+		 * Book does not exists
+		 */
+		if (!bookRepository.found(bookId)) {
+			throw new BookNotfoundexception("book not found.");
+		}
+
+		/*
+		 * Book is unavailable
+		 */
+		if (!bookRepository.available(bookId)) {
+			throw new BookNotfoundexception("book not available.");
+		}
+
+		User user = userRepository.getUser();
+
+		/*
+		 * User reached their quota
+		 */
+		if (user.getUserCheckoutCount() > CHECKOUT_QUOTA) {
+			throw new UserExceptions("User reached checkout quota");
+		}
+		if (user.getUserCheckoutCount() == CHECKOUT_QUOTA) {
+			// mark quota to full.
+		}
+
+		/*
+		 * Check the status of the book for the user
+		 */
+		CheckoutStatus checkoutStatus = bookRepository.getCheckoutStatus(userId, bookId);
+
+		/*
+		 * Book is already checked out by user
+		 */
+		if (checkoutStatus == CheckoutStatus.CHECKEDOUT) {
+			throw new AlreadyAssignedException("User already checkedout");
+		}
+
+		/*
+		 * Book is available, gets an old copy
+		 */
+		Bookcopy bookcopy = bookRepository.getAvailableBookCopy(bookId);
+
+		/*
+		 * Build a relation between user and books.
+		 */
+		Checkout checkout = checkoutUtilBuilder.buildCheckout(userId, bookcopy);
+
+		/*
+		 * Create a relation between user and books into database.
+		 */
+		checkoutRepository.save(checkout);
+
+		/*
+		 * Mark the copy as checked out and update its timestamp at every checkout.
+		 */
+		checkout = checkoutUtilBuilder.updateCheckout(checkout.getCheckoutId(), CheckoutStatus.CHECKEDOUT, Instant.now());
+
+		/*
+		 * Update the checkout row
+		 */
+		checkoutRepository.update(checkout);
+
+		/*
+		 * Update the user quota and checkout count
+		 */
+		user = checkoutUtilBuilder.updateUser(user);
+
+		/*
+		 * Update the user row
+		 */
+		userRepository.update(user);
+
+		/*
+		 * Every thing is now validated and data is created and mapped, all it needs is
+		 * to do is build and return checkout model
+		 */
+		return checkoutUtilBuilder.buildCheckoutModel(user, checkout);
+	}
+
+	@Override
+	public CheckoutModel returnbook(long userId, long bookCopyId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CheckoutModel returnbook(long userId, long bookCopyId, long checkoutId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
+
+```
+
