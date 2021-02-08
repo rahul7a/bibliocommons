@@ -624,8 +624,20 @@ Going by worflow of checking out ebooks if available, return the checked ebook a
 
 ![ClassDiagram2](./images/ClassDiagram2.PNG)
 
-
 ![ClassflowDIagram2](./images/ClassflowDIagram2.PNG)
+
+We have classes (layout) related to each interaction.
+
+1. One user can make either 0 or N reservations by calling `checkout` method.
+2. User can `return` book either by book-id or checkout-id
+3. User can find out their checkout quota
+4. Checkout is made against a bookcopy [book copy represents a copy of the book, there can be multiple copies], checkout can be made against 0 or any number of books.
+5. Bookcopy extends a Book. Bookcopy has the relation between a book and manifestation of the book.
+6. Inventory keeps track of book and bookcopy records, provide metadata if needed (with combination of other classes).
+7. Have dedicated enums for BookcopyStatus and CheckoutStatus.
+8. Interface CheckoutService has the services for checkout. Interface BookService has book, inventory services.
+9. Implementations are accompanied by helper classes for conversions or creation of models.
+
 
 ### Entity-Relation diagrams
 
