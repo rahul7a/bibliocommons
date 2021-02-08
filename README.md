@@ -620,6 +620,8 @@ Instead of an error, return a not found and let the client handle it gracefully.
 
 ### Class diagrams
 
+![ClassflowDIagram](./images/ClassflowDIagram.PNG)
+
 ![ClassDiagram](./images/ClassDiagram.PNG)
 
 ### Entity-Relation diagrams
