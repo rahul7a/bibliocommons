@@ -512,7 +512,7 @@ content-type: application/json
   "data": [
     "book": {
       "title": {
-        "book-identifier": "10001",
+        "bookId": "10001",
         "name": "Coding Principles,
         "author": "Jim browning",
         "description": "Describing coding principles."
@@ -556,7 +556,7 @@ content-type: application/json
   "data": [
     "book": {
       "title": {
-        "book-identifier": "10001",
+        "bookId": "10001",
         "name": "Coding Principles",
         "author": "Jim browning",
         "description": "Describing coding principles."
@@ -575,7 +575,7 @@ content-type: application/json
     },
     "book": {
       "title": {
-        "book-identifier": "10023",
+        "bookId": "10023",
         "name": "Architecture and Coding Principles",
         "author": "George fleming",
         "description": "Standard architecture and coding."
@@ -620,9 +620,12 @@ Instead of an error, return a not found and let the client handle it gracefully.
 
 ### Class diagrams
 
-![ClassflowDIagram](./images/ClassflowDIagram.PNG)
+Going by worflow of checking out ebooks if available, return the checked ebook and retrieve availability of the ebook went through the below Class and ER diagram
 
 ![ClassDiagram](./images/ClassDiagram.PNG)
+
+
+![ClassflowDIagram](./images/ClassflowDIagram.PNG)
 
 ### Entity-Relation diagrams
 
