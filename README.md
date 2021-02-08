@@ -854,24 +854,8 @@ public class CheckoutServiceImpl implements CheckoutService<CheckoutModel> {
 Code snipets for unit test
 
 ```
-package com.biblio.commons.takehome.services;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-
-import com.biblio.commons.takehome.exceptions.AlreadyAssignedException;
-import com.biblio.commons.takehome.exceptions.BookNotfoundexception;
-import com.biblio.commons.takehome.exceptions.UserExceptions;
-import com.biblio.commons.takehome.exceptions.UserNotfoundException;
-import com.biblio.commons.takehome.models.CheckoutModel;
-
 /**
  * Unit test for {@link CheckoutService}
- * 
- * @author rahul
  *
  */
 public class CheckoutServiceTest {
