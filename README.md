@@ -436,8 +436,12 @@ If user 78965 not found, return 404
 
 `404 NOT FOUND HTTP`
 
-
+***
+***
 ## Let to answer the above
+***
+***
+***
 
 
 >• The system should return an error if the user returns an ebook that they haven’t checked out.
@@ -603,4 +607,12 @@ content-type: application/json
 ```
 
 Instead of an error, return a not found and let the client handle it gracefully.
+
+***
+
+>• Code package and class layout <br/>
+• Database entities and their relationships between each other <br/>
+• Explanation of your design and why you chose to go with this design. Feel free to document any assumptions you have made. <br/>
+
+### Class diagrams
 
