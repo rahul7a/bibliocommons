@@ -26,8 +26,10 @@ Request-body:
 {
   "data": [
     {
-      "bookIdentifier": "10001",
-      "checkoutDate": "01-02-2020T13:00:00.000",
+      "book": {
+        "id": 10001,
+        "checkoutDate": "01-02-2020T13:00:00.000"
+      }
       "duration": {
         "days": 7
       }
@@ -52,14 +54,16 @@ Response-body:
         "currentCheckout", 1,
         "maxCheckout": 10,
         "quotaReached": false
-      },
-      "bookIdentifier": "10001",
-      "bookCopy": {
-        "number": 10,
-        "checkoutDate": "01-02-2020T13:00:00.000",
-        "dueDate": "08-02-2020T13:00:00.000",
-        "lastUpdatedDate": "01-01-2020T13:00:00.000",
-        "status": "checked-out"
+        "checkoutBooks": [
+          {
+            "id": 10001,
+            "copyId": 10,
+            "checkoutDate": "01-02-2020T13:00:00.000",
+            "dueDate": "08-02-2020T13:00:00.000",
+            "lastUpdatedDate": "01-01-2020T13:00:00.000",
+            "status": "checked-out"
+          }
+        ]
       }
     }
   ]
@@ -100,8 +104,10 @@ Request-body:
 {
   "data": [
     {
-      "bookIdentifier": "10005",
-      "checkoutDate": "01-02-2020T13:00:00.000",
+      "book": {
+        "id": 10005,
+        "checkoutDate": "01-02-2020T13:00:00.000"
+      }
       "duration": {
         "days": 7
       }
@@ -121,8 +127,8 @@ Response-body:
   "message": "Unprocessable Entity",
   "errors": [
     {
-      "resource": "data[0]",
-      "field": "bookIdentifier",
+      "resource": "data[0].book",
+      "field": "id",
       "message": "book not found in the system",
       "code": "not_found"
     }
@@ -148,8 +154,10 @@ Request-body:
 {
   "data": [
     {
-      "bookIdentifier": "10001",
-      "checkoutDate": "01-02-2020T13:00:00.000",
+      "book": {
+        "id": 10001,
+        "checkoutDate": "01-02-2020T13:00:00.000"
+      }
       "duration": {
         "days": 7
       }
@@ -169,8 +177,8 @@ Response-body:
   "message": "Unprocessable Entity",
   "errors": [
     {
-      "resource": "data[0]",
-      "field": "bookIdentifier",
+      "resource": "data[0].book",
+      "field": "id",
       "message": "book is already assigned to user",
       "code": "assigned"
     }
@@ -197,8 +205,10 @@ Request-body:
 {
   "data": [
     {
-      "bookIdentifier": "10001",
-      "checkoutDate": "01-02-2020T13:00:00.000",
+      "book": {
+        "id": 10001,
+        "checkoutDate": "01-02-2020T13:00:00.000"
+      }
       "duration": {
         "days": 7
       }
@@ -222,15 +232,17 @@ Response-body:
         "id": "78965",
         "currentCheckout", 10,
         "maxCheckout": 10,
-        "quotaReached": true
-      },
-      "bookIdentifier": "10001",
-      "bookCopy": {
-        "number": 10,
-        "checkoutDate": "01-02-2020T13:00:00.000",
-        "dueDate": "08-02-2020T13:00:00.000",
-        "lastUpdatedDate": "01-01-2020T13:00:00.000",
-        "status": "checked-out"
+        "quotaReached": false
+        "checkoutBooks": [
+          {
+            "id": 10001,
+            "copyId": 10,
+            "checkoutDate": "01-02-2020T13:00:00.000",
+            "dueDate": "08-02-2020T13:00:00.000",
+            "lastUpdatedDate": "01-01-2020T13:00:00.000",
+            "status": "checked-out"
+          }
+        ]
       }
     }
   ]
@@ -254,8 +266,10 @@ Request-body:
 {
   "data": [
     {
-      "bookIdentifier": "10001",
-      "checkoutDate": "01-02-2020T13:00:00.000",
+      "book": {
+        "id": 10001,
+        "checkoutDate": "01-02-2020T13:00:00.000"
+      }
       "duration": {
         "days": 7
       }
@@ -275,8 +289,8 @@ Response-body:
   "message": "Unprocessable Entity",
   "errors": [
     {
-      "resource": "data[0]",
-      "field": "bookIdentifier",
+      "resource": "data[0].book",
+      "field": "id",
       "message": "Exceeded max checkout quota",
       "code": "quota_reached"
     }
@@ -304,8 +318,10 @@ Request-body:
 {
   "data": [
     {
-      "bookIdentifier": "10005",
-      "checkoutDate": "01-02-2020T13:00:00.000",
+      "book": {
+        "id": 10005,
+        "checkoutDate": "01-02-2020T13:00:00.000"
+      }
       "duration": {
         "days": 7
       }
@@ -325,8 +341,8 @@ Response-body:
   "message": "Unprocessable Entity",
   "errors": [
     {
-      "resource": "data[0]",
-      "field": "bookIdentifier",
+      "resource": "data[0].book",
+      "field": "id",
       "message": "book is unavailable",
       "code": "unavailable"
     }
@@ -366,8 +382,8 @@ Content-Type: application/json
 Request-body:
 {
   "data": [
-    {
-      "bookIdentifier": "10001",
+    "book": {
+      "id": 10001,
       "returnDate": "02-02-2020T13:00:00.000"
     }
   ]
@@ -390,19 +406,20 @@ Response-body:
         "currentCheckout", 0,
         "maxCheckout": 10,
         "quotaReached": false
-      },
-      "bookIdentifier": "10001",
-      "bookCopy": {
-        "number": 10,
-        "checkoutDate": "n/a",
-        "dueDate": "n/a",
-        "lastUpdatedDate": "02-02-2020T13:00:00.000",
-        "status": "available"
+        "checkoutBooks": [
+          {
+            "id": 10001,
+            "copyId": 10,
+            "checkoutDate": null,
+            "dueDate": null,
+            "lastUpdatedDate": "02-02-2020T13:00:00.000",
+            "status": "available"
+          }
+        ]
       }
     }
   ]
 }
-
 ```
 
 Updates the User quota and marks the ebook as available.
@@ -436,8 +453,8 @@ Content-Type: application/json
 Request-body:
 {
   "data": [
-    {
-      "bookIdentifier": "10001",
+    "book": {
+      "id": 10001,
       "returnDate": "02-02-2020T13:00:00.000"
     }
   ]
@@ -486,7 +503,7 @@ Let's design both requests to retrieve ebook(s)
 content-type: application/json 
 
 {
-  "books": [
+  "data": [
     "book": {
       "title": {
         "book-identifier": "10001",
@@ -530,7 +547,7 @@ From the above response we can see, an ebook with title and inventory informatio
 content-type: application/json 
 
 {
-  "books": [
+  "data": [
     "book": {
       "title": {
         "book-identifier": "10001",
