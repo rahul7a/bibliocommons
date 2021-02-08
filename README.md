@@ -29,7 +29,7 @@ Request-body:
       "book": {
         "id": 10001,
         "checkoutDate": "01-02-2020T13:00:00.000"
-      }
+      },
       "duration": {
         "days": 7
       }
@@ -54,17 +54,17 @@ Response-body:
         "currentCheckout", 1,
         "maxCheckout": 10,
         "quotaReached": false
-        "checkoutBooks": [
-          {
-            "id": 10001,
-            "copyId": 10,
-            "checkoutDate": "01-02-2020T13:00:00.000",
-            "dueDate": "08-02-2020T13:00:00.000",
-            "lastUpdatedDate": "01-01-2020T13:00:00.000",
-            "status": "checked-out"
-          }
-        ]
-      }
+      },
+      "checkoutBooks": [
+        {
+          "id": 10001,
+          "copyId": 10,
+          "checkoutDate": "01-02-2020T13:00:00.000",
+          "dueDate": "08-02-2020T13:00:00.000",
+          "lastUpdatedDate": "01-01-2020T13:00:00.000",
+          "status": "checked-out"
+        }
+      ]
     }
   ]
 }
@@ -107,7 +107,7 @@ Request-body:
       "book": {
         "id": 10005,
         "checkoutDate": "01-02-2020T13:00:00.000"
-      }
+      },
       "duration": {
         "days": 7
       }
@@ -157,7 +157,7 @@ Request-body:
       "book": {
         "id": 10001,
         "checkoutDate": "01-02-2020T13:00:00.000"
-      }
+      },
       "duration": {
         "days": 7
       }
@@ -208,7 +208,7 @@ Request-body:
       "book": {
         "id": 10001,
         "checkoutDate": "01-02-2020T13:00:00.000"
-      }
+      },
       "duration": {
         "days": 7
       }
@@ -233,17 +233,17 @@ Response-body:
         "currentCheckout", 10,
         "maxCheckout": 10,
         "quotaReached": false
-        "checkoutBooks": [
-          {
-            "id": 10001,
-            "copyId": 10,
-            "checkoutDate": "01-02-2020T13:00:00.000",
-            "dueDate": "08-02-2020T13:00:00.000",
-            "lastUpdatedDate": "01-01-2020T13:00:00.000",
-            "status": "checked-out"
-          }
-        ]
-      }
+      },
+      "checkoutBooks": [
+        {
+          "id": 10001,
+          "copyId": 10,
+          "checkoutDate": "01-02-2020T13:00:00.000",
+          "dueDate": "08-02-2020T13:00:00.000",
+          "lastUpdatedDate": "01-01-2020T13:00:00.000",
+          "status": "checked-out"
+        }
+      ]
     }
   ]
 }
@@ -269,7 +269,7 @@ Request-body:
       "book": {
         "id": 10001,
         "checkoutDate": "01-02-2020T13:00:00.000"
-      }
+      },
       "duration": {
         "days": 7
       }
@@ -321,7 +321,7 @@ Request-body:
       "book": {
         "id": 10005,
         "checkoutDate": "01-02-2020T13:00:00.000"
-      }
+      },
       "duration": {
         "days": 7
       }
@@ -406,17 +406,17 @@ Response-body:
         "currentCheckout", 0,
         "maxCheckout": 10,
         "quotaReached": false
-        "checkoutBooks": [
-          {
-            "id": 10001,
-            "copyId": 10,
-            "checkoutDate": null,
-            "dueDate": null,
-            "lastUpdatedDate": "02-02-2020T13:00:00.000",
-            "status": "available"
-          }
-        ]
-      }
+      },
+      "checkoutBooks": [
+        {
+          "id": 10001,
+          "copyId": 10,
+          "checkoutDate": null,
+          "dueDate": null,
+          "lastUpdatedDate": "02-02-2020T13:00:00.000",
+          "status": "available"
+        }
+      ]
     }
   ]
 }
