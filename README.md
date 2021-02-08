@@ -851,3 +851,19 @@ public class CheckoutServiceImpl implements CheckoutService<CheckoutModel> {
 
 ```
 
+### Handle concurrency
+
+Would approach with **locking** (database tables), have locking mechanisms set on the database system (set some Isolation level)
+
+In database management theory, locking is used to implement isolation among multiple database users. Locks are applied by a transaction to data, which may block other transactions from accessing the same data during the transaction's life.
+
+Shared lock: Read lock i.e. Any other transaction can read but not write
+Exclusive lock: Write lock i.e. No other transaction can read or write
+
+If we do not want database physical locks, we can use Optimistic Locking (preferably) or Pessimistic Locking if running parallel database operations.
+
+Have an auto incrementor for locks, if the increment is not the latest/greatest ignore the request been made.
+
+Gaol is to maintain ACID (I - islotaion) if we are using relation database systems.
+
+
