@@ -616,3 +616,6 @@ Instead of an error, return a not found and let the client handle it gracefully.
 
 ### Class diagrams
 
+### Entity-Relation diagrams
+
+![ER](./images/ER.PNG)
