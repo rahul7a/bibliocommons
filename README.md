@@ -622,11 +622,11 @@ Instead of an error, return a not found and let the client handle it gracefully.
 
 Going by worflow of checking out ebooks if available, return the checked ebook and retrieve availability of the ebook went through the below Class and ER diagram
 
-![ClassDiagram](./images/ClassDiagram.PNG)
+![ClassDiagram2](./images/ClassDiagram2.PNG)
 
 
-![ClassflowDIagram](./images/ClassflowDIagram.PNG)
+![ClassflowDIagram2](./images/ClassflowDIagram2.PNG)
 
 ### Entity-Relation diagrams
 
-![ER](./images/ER.PNG)
+![ER2](./images/ER2.PNG)
