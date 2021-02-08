@@ -1,6 +1,8 @@
 # bibliocommons
 Take home assignment
 
+`Note` takehome folder has the project structure and directory.
+
 ## Library availability system for ebooks
 
 ## Part 1
