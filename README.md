@@ -626,6 +626,19 @@ Designed the below Class and ER diagrams.
 
 ![ClassDiagram3](./images/ClassDiagram3.PNG)
 
+Library: The central part of the system
+
+Book: The basic building block of the system. Every book will have id, Title, Publishers, etc.
+
+Bookcopy: Any book can have multiple copies, each copy will be considered a bookcopy in the system. Each bookcopy item will have a unique id.
+
+User: Will be a general consumer of the library system.
+
+Checkout: Responsible for managing checkouts against books. Checkout the books and return the books
+
+Inventory: It has the metadata for the books.
+
+
 ![ClassflowDIagram3](./images/ClassflowDIagram3.PNG)
 
 We have classes (layout) related to each interaction.
