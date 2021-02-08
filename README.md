@@ -624,7 +624,7 @@ Going by worflow of checking out ebooks if available, return the checked ebook a
 
 ![ClassDiagram2](./images/ClassDiagram2.PNG)
 
-![ClassflowDIagram2](./images/ClassflowDIagram2.PNG)
+![ClassflowDIagram3](./images/ClassflowDIagram3.PNG)
 
 We have classes (layout) related to each interaction.
 
