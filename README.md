@@ -139,7 +139,7 @@ Response-body:
 
 ```
 
-Give a 422 as unprocessible entity, since the bookIdentifier/ebook does not exist in the system.  
+Give a 422 as unprocessible entity, since the ebook does not exist in the system.  
 
 
 >• The system should return an error if the ebook is checked out to the user already.<br/>
@@ -353,7 +353,7 @@ Response-body:
 
 ```
 
-Give a 422 as unprocessible entity, since the bookIdentifier/ebook is unavailable.
+Give a 422 as unprocessible entity, since the ebook is unavailable.
 
 `Note:` There seems a lot of 422 being raised. I want the client to understand the root cause of failure. Clients can parse the error response and get to know the state and the error being raised.<br/>
 The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity, and the syntax of the request entity (which is correct, if not 400 (Malformed request) is raised) but was unable to process the payload.
@@ -438,12 +438,50 @@ If user 78965 not found, return 404
 
 `404 NOT FOUND HTTP`
 
-***
-***
-## Let to answer the above
-***
-***
-***
+
+If ebook 10005 is not in the system
+
+#### Request uri, header and payload 
+
+```
+PUT /users/78965/checkouts HTTP
+
+Headers:
+Content-Type: application/json
+
+Request-body:
+{
+  "data": [
+    "book": {
+      "id": 10001,
+      "returnDate": "02-02-2020T13:00:00.000"
+    }
+  ]
+}
+```
+
+#### Response
+
+```
+422 Unprocessable Entity
+content-type: application/json 
+
+Response-body:
+{
+  "message": "Unprocessable Entity",
+  "errors": [
+    {
+      "resource": "data[0].book",
+      "field": "id",
+      "message": "book not found in the system",
+      "code": "not_found"
+    }
+  ]
+}
+
+```
+
+Give a 422 as unprocessible entity, since the ebook does not exist in the system.
 
 
 >• The system should return an error if the user returns an ebook that they haven’t checked out.
@@ -660,6 +698,9 @@ We have classes (layout) related to each interaction.
 
 The diagram above shows the business objects used in this API as well as their relationships. The library stocks many books. Each book can have several copies - represented by the Bookcopy objects. Each Bookcopy has a unique identification. The library has many Users. Each User can checkout an ebook. The attributes of a checkout are represented by the Checkout object. When a User does a checkout the associated class objects are created and data is inserted along after validations. Similarly Book and Inventory provides inforation and metadata for the books.
 
+`Note` Most of the class and ER go together. Will be seeing overlapping of names.
+
+***
 
 ## Part 3
 
